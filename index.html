@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yu An’s Charm Bracelet</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#fff0f7;--bg2:#e8e4ff;--ink:#4a3a5c;--card:#ffffffcc;--pink:#f06ea0;--lav:#8a7cf0;--line:#e0d2f4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#2b2140;--bg2:#1c1a34;--ink:#f3eaff;--card:#3b2f55cc;--line:#55456f}}
+:root[data-theme="dark"]{--bg1:#2b2140;--bg2:#1c1a34;--ink:#f3eaff;--card:#3b2f55cc;--line:#55456f}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;font-family:'Fredoka',system-ui,sans-serif;color:var(--ink);background:var(--bg1) linear-gradient(160deg,var(--bg1),var(--bg2)) fixed}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:14px 16px 6px;max-width:760px;margin:0 auto}
+h1{font-size:1.3rem;margin:0}h2{margin:.2em 0 .4em;font-size:1.25rem}
+#count{background:var(--card);border:2px solid var(--line);border-radius:99px;padding:6px 14px;font-weight:600;white-space:nowrap}
+nav{display:flex;gap:6px;flex-wrap:wrap;padding:6px 16px;max-width:760px;margin:0 auto}
+nav a{color:var(--ink);text-decoration:none;background:var(--card);border:2px solid var(--line);border-radius:99px;padding:6px 12px;font-size:.9rem}
+nav a.on{background:var(--pink);border-color:var(--pink);color:#fff}
+#badge{background:var(--pink);color:#fff;border-radius:99px;padding:0 6px;font-size:.75rem;margin-left:3px}
+main{max-width:760px;margin:0 auto;padding:8px 16px 48px}
+.page{display:none}.page.on{display:block}
+.card{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:16px}
+.btn{font:inherit;font-weight:600;border:0;border-radius:99px;padding:10px 20px;color:#fff;background:linear-gradient(135deg,var(--pink),var(--lav));cursor:pointer;box-shadow:0 3px 0 #0002}
+.btn.ghost{background:var(--card);color:var(--ink);border:2px solid var(--line);box-shadow:none}
+.btn:focus-visible,nav a:focus-visible,.sq:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-offset:2px}
+.sub{text-align:center;opacity:.85;margin:.2em 0}
+#stage{position:relative;isolation:isolate;height:300px;touch-action:pan-y;cursor:grab;user-select:none;overflow:hidden}
+.bead{position:absolute;left:0;top:0;width:12px;height:11px;border-radius:5px;background:linear-gradient(180deg,#fff9,#0000 45%,#0004),repeating-linear-gradient(90deg,#8a90a0 0 1px,#eceef4 1px 3px,#a9aebb 3px 4px);box-shadow:0 1px 2px #0006}.spc{position:absolute;left:0;top:0;width:38px;height:34px;filter:drop-shadow(0 2px 2px #0005)}
+.slot{position:absolute;left:0;top:0;width:64px;height:64px;transform-origin:50% 0;cursor:pointer}
+.slot svg{width:100%;height:100%;filter:drop-shadow(0 3px 3px #0004)}
+.lock{width:52px;height:52px;margin:6px;border:2px dashed var(--lav);border-radius:50%;display:grid;place-items:center;color:var(--lav);font-weight:600;font-size:1.4rem}
+#done{display:none;text-align:center;margin-top:12px}#done.on{display:block}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg1);padding:10px 18px;border-radius:99px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:60;max-width:90vw;text-align:center}
+#toast.on{opacity:1}
+#modal{position:fixed;inset:0;background:#0007;display:none;place-items:center;z-index:70;padding:16px}#modal.on{display:grid}
+.box{background:var(--bg1);color:var(--ink);border-radius:24px;padding:22px;max-width:360px;width:100%;text-align:center}
+#mbtn{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}.big svg{width:110px;height:110px}
+#fw{position:fixed;inset:0;pointer-events:none;z-index:80}
+.row{display:flex;gap:10px;align-items:center;padding:12px 6px;border-bottom:1px solid var(--line);cursor:pointer}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--pink);flex:none}.dot.r{background:none}
+.msg p{line-height:1.55;margin:.7em 0}.hide{display:none!important}
+.clue{display:flex;gap:12px;align-items:center;margin:12px 0}
+.clue input{width:52px;height:52px;flex:none;text-align:center;font:inherit;font-size:1.5rem;text-transform:uppercase;border:2px solid var(--line);border-radius:14px;background:var(--bg1);color:var(--ink)}
+.sign{width:fit-content;margin:0 auto 12px;background:var(--pink);color:#fff;padding:8px 18px;border-radius:12px;font-weight:600;text-align:center;transform:rotate(-1.5deg)}
+.shelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px}
+.sq{background:var(--bg1);border:2px solid var(--line);border-radius:16px;padding:6px;text-align:center;font:inherit;font-size:.8rem;color:var(--ink);cursor:pointer}
+.sq svg{display:block;margin:0 auto 4px;width:100%;max-width:88px;height:auto}.sq.empty{border-style:dashed;opacity:.35;cursor:default;min-height:100px}
+#basket{min-height:110px;display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start}.it{width:78px}
+.paying .it{animation:drop .9s ease-in forwards}
+@keyframes drop{to{transform:translateY(150px) scale(.3);opacity:0}}
+#bag{width:96px;height:84px;margin:10px auto 0;background:#d9a066;border-radius:6px 6px 14px 14px;position:relative}
+#bag:before{content:"";position:absolute;left:26px;top:-16px;width:44px;height:26px;border:4px solid #b9803f;border-bottom:0;border-radius:24px 24px 0 0}
+#bag.pop{animation:pop .5s}@keyframes pop{50%{transform:scale(1.15)}}
+.fl{transform-origin:center bottom;transform-box:fill-box;transition:.4s}.cd{cursor:pointer}.cd.out .fl{opacity:0;transform:scale(.2)}
+.sm{opacity:0}.cd.out .sm{animation:rise 1.3s}@keyframes rise{0%{opacity:.7;transform:translateY(0)}100%{opacity:0;transform:translateY(-30px)}}
+@media (prefers-reduced-motion:reduce){.paying .it,#bag.pop,.cd.out .sm{animation:none}}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="sv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#b8bcc8"/><stop offset=".6" stop-color="#f4f5f8"/><stop offset="1" stop-color="#8f94a3"/></linearGradient></defs></svg>
+<header><h1>Happy 31st, Yu An ♡</h1><div id="count">0/5 charms collected</div></header>
+<nav><a href="#home">Bracelet</a><a href="#inbox">Inbox<span id="badge">3</span></a><a href="#password">Password game</a><a href="#shop">Squishy shop</a><a href="#cake">Birthday cake</a></nav>
+<main>
+<section id="home" class="page on"><div class="card">
+<h2 class="sub">Explore this space to collect charms for your friendship bracelet!</h2>
+<div id="stage" aria-label="Charm bracelet. Drag to rotate."></div>
+<p class="sub">Drag to spin the bracelet 360°. Tap a charm to peek at it.</p>
+<div id="done" class="card"><b>Your bracelet is complete! ♡</b><br>Happy birthday, Yu An! Hope you’ve enjoyed this little game I made specially for you!<button class="btn" id="again" style="display:block;margin:18px auto 0">Play Again</button></div></div></section>
+
+<section id="inbox" class="page"><div class="card">
+<div id="list"></div>
+<div id="detail" class="msg hide"><button class="btn ghost" id="back">Back to inbox</button><h2 id="dsub"></h2><div id="dbody"></div></div></div></section>
+
+<section id="password" class="page"><div class="card"><h2>Password game</h2>
+<p>Each letter has a clue. Work out all four to unlock a charm.</p>
+<div class="clue"><input maxlength="1" aria-label="Letter 1"><span>The first letter of your pet’s species</span></div>
+<div class="clue"><input maxlength="1" aria-label="Letter 2"><span>The 7th letter of the agency you currently work at</span></div>
+<div class="clue"><input maxlength="1" aria-label="Letter 3"><span>The 4th letter of your HDB estate’s name</span></div>
+<div class="clue"><input maxlength="1" aria-label="Letter 4"><span>The first letter of the name of your most favourite person in the whole entire world</span></div>
+<p id="genius" class="hide"><b>HPBD, you genius!</b></p><button class="btn" id="unlock">Unlock</button> <button class="btn hide" id="claimMoon">Claim Reward</button></div></section>
+
+<section id="shop" class="page"><div class="card"><h2>Squishy shop</h2>
+<div class="sign">Buy at least 2 and Get a Free Gift!</div>
+<div class="shelf" id="shelf"></div>
+<h2 style="margin-top:18px">Your basket</h2>
+<div id="basket" class="card"></div>
+<div style="text-align:center;margin-top:12px"><button class="btn" id="checkout">Checkout</button> <button class="btn hide" id="gift">You got a free gift!</button></div>
+<div id="bag" aria-hidden="true"></div></div></section>
+
+<section id="cake" class="page"><div class="card" style="text-align:center"><h2>Make a wish</h2>
+<p>Click each candle to blow it out. <b id="cc">0/5 blown out</b></p>
+<svg id="cakesvg" viewBox="0 0 300 260" style="width:100%;max-width:380px"></svg><br>
+<button class="btn hide" id="prize">You’ve earned a prize!</button></div></section>
+</main>
+<div id="toast"></div><canvas id="fw"></canvas>
+<div id="modal"><div class="box"><h2 id="mt"></h2><div id="mb"></div><div id="mbtn"></div></div></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let have=new Set();try{have=new Set(JSON.parse(localStorage.getItem('yuan-charms')||'[]'))}catch(e){}
+const save=()=>{try{localStorage.setItem('yuan-charms',JSON.stringify([...have]))}catch(e){}};
+const G='fill="url(#sv)" stroke="#6b7080" stroke-width="1.6" stroke-linejoin="round"',R='<circle cx="32" cy="5" r="3.5" fill="none" stroke="#6b7080" stroke-width="1.6"/>';
+const cs=c=>`<svg viewBox="0 0 64 64">${c}</svg>`;
+const CH={
+heart:{n:'Heart locket charm',h:'Something is waiting in your inbox…',svg:cs(`${R}<path ${G} d="M32 58C10 42 6 28 12 19c5-7 15-6 20 2c5-8 15-9 20-2c6 9 2 23-20 39z"/><path d="M32 24l3 8 8 2-8 3-3 9-3-9-8-3 8-2z" fill="#fff" stroke="#6b7080" stroke-width="1.2"/>`)},
+hamster:{n:'Hamster charm',h:'Your hamsters are up to something in the inbox…',svg:cs(`${R}<circle ${G} cx="18" cy="22" r="7"/><circle ${G} cx="46" cy="22" r="7"/><circle cx="18" cy="22" r="3.5" fill="#fff" stroke="#6b7080" stroke-width="1"/><circle cx="46" cy="22" r="3.5" fill="#fff" stroke="#6b7080" stroke-width="1"/><ellipse ${G} cx="32" cy="42" rx="20" ry="16"/><ellipse ${G} cx="32" cy="32" rx="19" ry="15"/><circle cx="25" cy="31" r="2.2" fill="#4a4f5e"/><circle cx="39" cy="31" r="2.2" fill="#4a4f5e"/><circle cx="32" cy="35" r="1.8" fill="#6b7080"/><ellipse cx="20" cy="36" rx="3.5" ry="2.2" fill="#fff" opacity=".7"/><ellipse cx="44" cy="36" rx="3.5" ry="2.2" fill="#fff" opacity=".7"/><ellipse cx="32" cy="48" rx="4" ry="5" fill="#8f94a3" stroke="#6b7080" stroke-width="1"/><circle ${G} cx="27" cy="49" r="3"/><circle ${G} cx="37" cy="49" r="3"/>`)},
+moon:{n:'Moon charm',h:'A little password puzzle holds this one…',svg:cs(`<circle cx="40" cy="5" r="3.5" fill="none" stroke="#6b7080" stroke-width="1.6"/><path ${G} d="M44 10A24 24 0 1 0 44 54A26 26 0 0 1 44 10z"/><path d="M14 30q3 3 6 0" stroke="#6b7080" fill="none" stroke-width="1.6" stroke-linecap="round"/><circle cx="17" cy="38" r="3" fill="#f5b5c0"/><path d="M20 42q3 3 6 0" stroke="#6b7080" fill="none" stroke-width="1.5" stroke-linecap="round"/>`)},
+butterfly:{n:'Butterfly charm',h:'Maybe a shopping trip would help…',svg:cs(`<path ${G} d="M32 30C22 6 4 10 8 26c2 8 12 9 24 4z"/><path ${G} d="M32 30C42 6 60 10 56 26c-2 8-12 9-24 4z"/><path ${G} d="M32 32C18 34 10 42 18 52c6 7 12-4 14-20z"/><path ${G} d="M32 32C46 34 54 42 46 52c-6 7-12-4-14-20z"/><path d="M30 28C22 14 14 14 14 22c1 4 8 6 16 6zM34 28C42 14 50 14 50 22c-1 4-8 6-16 6z" fill="none" stroke="#6b7080" stroke-width="1.2"/><ellipse cx="32" cy="34" rx="2.8" ry="13" fill="#8f94a3" stroke="#6b7080"/><path d="M31 21Q27 12 22 9M33 21Q37 12 42 9" stroke="#6b7080" fill="none" stroke-width="1.4"/>`)},
+flower:{n:'Flower charm',h:'Something sweet is happening near the cake…',svg:cs(`${R}<g ${G}><circle cx="32" cy="19" r="11"/><circle cx="45" cy="32" r="11"/><circle cx="32" cy="45" r="11"/><circle cx="19" cy="32" r="11"/></g><circle cx="32" cy="32" r="13" fill="url(#sv)"/><circle cx="32" cy="32" r="7" fill="#fff" stroke="#6b7080" stroke-width="1.4"/><circle cx="32" cy="32" r="2.5" fill="#8f94a3"/>`)}};
+const ORDER=['heart','hamster','moon','butterfly','flower'];
+let toastT;const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('on'),2400)};
+function modal(t,b,btns){$('#mt').textContent=t;$('#mb').innerHTML=b;const m=$('#mbtn');m.innerHTML='';btns.forEach(([x,f,c])=>{const e=document.createElement('button');e.className='btn '+(c||'');e.textContent=x;e.onclick=()=>{$('#modal').classList.remove('on');f&&f()};m.append(e)});$('#modal').classList.add('on')}
+/* fireworks */
+const cv=$('#fw'),cx2=cv.getContext('2d');let P=[],run=false;
+function boom(k=5){for(let i=0;i<k;i++)setTimeout(()=>{const x=innerWidth*(.15+Math.random()*.7),y=innerHeight*(.12+Math.random()*.4),c=`hsl(${Math.random()*360},90%,65%)`;for(let j=0;j<46;j++){const a=Math.random()*6.283,s=1+Math.random()*4;P.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1,c})}go()},i*350)}
+function go(){if(run)return;run=true;cv.width=innerWidth;cv.height=innerHeight;(function t(){cx2.clearRect(0,0,cv.width,cv.height);P=P.filter(p=>p.l>0);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.05;p.vx*=.985;p.l-=.014;cx2.globalAlpha=p.l;cx2.fillStyle=p.c;cx2.beginPath();cx2.arc(p.x,p.y,2.4,0,7);cx2.fill()});if(P.length)requestAnimationFrame(t);else{run=false;cx2.clearRect(0,0,cv.width,cv.height)}})()}
+/* bracelet */
+const stage=$('#stage'),beads=[],slots=[];let rot=0,vel=0,drag=false,lx=0,moved=0;
+const spcs=[],SP=[];
+for(let i=0;i<120;i++){const b=document.createElement('div');b.className='bead';stage.append(b);beads.push(b)}
+SP.forEach(()=>{const b=document.createElement('div');b.className='spc';b.innerHTML='<svg viewBox="0 0 40 34" width="38" height="34"><rect x="2" y="3" width="36" height="28" rx="10" fill="url(#sv)" stroke="#4d5262" stroke-width="1.5"/><path d="M11 5v24M29 5v24" stroke="#4d5262" stroke-width="1.5"/><path d="M20 24c-6-4-8-7-6-10 1.5-2 4-1.5 6 1 2-2.5 4.5-3 6-1 2 3 0 6-6 10z" fill="#4d5262"/><circle cx="6.5" cy="17" r="2" fill="#4d5262"/><circle cx="33.5" cy="17" r="2" fill="#4d5262"/></svg>';stage.append(b);spcs.push(b)});
+ORDER.forEach(id=>{const s=document.createElement('div');s.className='slot';s.onclick=()=>{if(moved>5)return;toast(have.has(id)?CH[id].n+' ♡ collected':CH[id].h)};stage.append(s);slots.push(s)});
+function sync(){$('#count').textContent=`${have.size}/5 charms collected`;ORDER.forEach((id,i)=>slots[i].innerHTML=have.has(id)?CH[id].svg:'<div class="lock">?</div>');$('#done').classList.toggle('on',have.size==5)}
+function frame(){const w=stage.clientWidth,h=stage.clientHeight,r=Math.min(w*.36,150),ry=r*.3,cx=w/2,cy=h*.38;
+if(!drag){rot+=vel+(Math.abs(vel)<.1?.15:0);vel*=.95}
+const tg=a=>Math.atan2(-ry*Math.sin(a),r*Math.cos(a))*180/Math.PI;
+beads.forEach((b,i)=>{const a=(i*3+rot)*Math.PI/180,z=Math.cos(a),s=.6+.4*(z+1)/2;b.style.transform=`translate(${cx+r*Math.sin(a)-6}px,${cy+ry*z-5.5}px) rotate(${tg(a)}deg) scale(${s})`;b.style.zIndex=Math.round(z*50+50);b.style.opacity=.6+.4*(z+1)/2});
+spcs.forEach((b,i)=>{const a=(SP[i]+rot)*Math.PI/180,z=Math.cos(a),s=.6+.4*(z+1)/2;b.style.transform=`translate(${cx+r*Math.sin(a)-19}px,${cy+ry*z-17}px) rotate(${tg(a)}deg) scale(${s})`;b.style.zIndex=Math.round(z*50+51);b.style.opacity=.6+.4*(z+1)/2});
+slots.forEach((e,i)=>{const a=(i*72+rot)*Math.PI/180,z=Math.cos(a),s=.6+.4*(z+1)/2;e.style.transform=`translate(${cx+r*Math.sin(a)-32}px,${cy+ry*z}px) scale(${s})`;e.style.zIndex=Math.round(z*50+50);e.style.opacity=.55+.45*(z+1)/2});
+requestAnimationFrame(frame)}
+stage.addEventListener('pointerdown',e=>{drag=true;lx=e.clientX;moved=0;vel=0});
+addEventListener('pointermove',e=>{if(!drag)return;const d=e.clientX-lx;lx=e.clientX;moved+=Math.abs(d);vel=d*.5;rot+=vel});
+addEventListener('pointerup',()=>{drag=false;setTimeout(()=>moved=0,50)});
+/* redeem */
+function redeem(id){const c=CH[id],had=have.has(id);have.add(id);save();sync();if(!had)boom(3);
+modal(had?'Already on your bracelet ♡':'Charm redeemed!',`<div class="big">${c.svg}</div><p>${had?'You already have the':'You got the'} ${c.n.toLowerCase()}.</p>`,[['See my bracelet',()=>show('home')],['Keep exploring',null,'ghost']])}
+/* inbox */
+const MS=[
+{f:'SiRui ♡',s:'Happy birthday, Yu An!',b:['Yu An! ♡ Happy birthday to the cutest, prettiest girlie in all the lands of Canberra (Canberra, Singapore AND Canberra, Australia wahahaha)! I just want you to know how much I treasure and appreciate our 18-year friendship, and I hope we’ll continue to be great friends forever and ever until we die.','You know, one thing I admire about you is that you always give your all, your 1000% to everything you do. You never half-ass anything. You really pour your heart and soul into your crafts, your work, your relationships, even your makeup and wardrobe, and of course your kickass Halloween costume. I hope you’ll pour this same love into yourself, and give yourself all the compassion, empathy and appreciation that you undoubtedly deserve!','I love you very much, my darling girl, my sweet friend.','- SiRui'],btn:'Here’s a present for you',act:()=>redeem('heart')},
+{f:'Your hamsters 🐹',s:'We found something!',b:['🐹 Your hamsters went roaming around the house and, by luck, they found something curiously shiny. They thought that you might like it!'],btn:'What did they find?',act:()=>redeem('hamster')},
+{f:'Charm keeper ✨',s:'A little hint',b:['To get more charms, you have to explore the site. There’s a lot more to find than what’s in this inbox!'],btn:'Take me to the homepage',act:()=>show('home')}];
+const seen=new Set();
+function list(){$('#list').innerHTML='';MS.forEach((m,i)=>{const r=document.createElement('div');r.className='row';r.tabIndex=0;r.innerHTML=`<span class="dot ${seen.has(i)?'r':''}"></span><div><b>${m.f}</b><br>${m.s}</div>`;const o=()=>{seen.add(i);$('#badge').textContent=3-seen.size;$('#badge').classList.toggle('hide',seen.size==3);$('#list').classList.add('hide');$('#detail').classList.remove('hide');$('#dsub').textContent=m.s;$('#dbody').innerHTML=m.b.map(p=>`<p>${p}</p>`).join('');const b=document.createElement('button');b.className='btn';b.textContent=m.btn;b.onclick=m.act;$('#dbody').append(b)};r.onclick=o;r.onkeydown=e=>e.key=='Enter'&&o();$('#list').append(r)})}
+$('#back').onclick=()=>{$('#detail').classList.add('hide');$('#list').classList.remove('hide');list()};list();
+/* password */
+const ins=$$('.clue input');
+ins.forEach((e,i)=>{e.oninput=()=>{e.value=e.value.slice(-1).toUpperCase();if(e.value&&ins[i+1])ins[i+1].focus()};e.onkeydown=k=>{if(k.key=='Backspace'&&!e.value&&ins[i-1])ins[i-1].focus();if(k.key=='Enter')$('#unlock').click()}});
+$('#unlock').onclick=()=>{if(ins.map(e=>e.value).join('').toUpperCase()=='HPBD'){boom(7);ins.forEach(e=>e.disabled=true);$('#unlock').classList.add('hide');$('#genius').classList.remove('hide');$('#claimMoon').classList.remove('hide')}else modal('Not quite right','<p>That answer isn’t quite right. Try again!</p>',[['Try again',()=>ins[0].focus()]])};
+$('#claimMoon').onclick=()=>redeem('moon');
+/* shop */
+const F=(x,y)=>`<circle cx="${x-8}" cy="${y}" r="2.6" fill="#3b2d3f"/><circle cx="${x+8}" cy="${y}" r="2.6" fill="#3b2d3f"/><circle cx="${x-14}" cy="${y+5}" r="3.5" fill="#ff8fa8" opacity=".6"/><circle cx="${x+14}" cy="${y+5}" r="3.5" fill="#ff8fa8" opacity=".6"/><path d="M${x-3} ${y+4}q3 3 6 0" stroke="#3b2d3f" fill="none" stroke-linecap="round"/>`;
+const sv=c=>`<svg viewBox="0 0 100 100">${c}</svg>`;
+const SQ=[
+{id:'b',n:'Butter stick',svg:sv(`<rect x="12" y="30" width="76" height="44" rx="12" fill="#ffe27a"/><rect x="12" y="30" width="76" height="15" rx="12" fill="#fff3b0"/>${F(50,56)}`)},
+{id:'p',n:'Peanut',svg:sv(`<ellipse cx="30" cy="52" rx="24" ry="22" fill="#e8bf8a"/><ellipse cx="70" cy="52" rx="24" ry="22" fill="#e8bf8a"/><rect x="40" y="34" width="20" height="36" fill="#e8bf8a"/><circle cx="22" cy="38" r="1.5" fill="#c99a62"/><circle cx="78" cy="64" r="1.5" fill="#c99a62"/>${F(50,50)}`)},
+{id:'h',n:'Burger',svg:sv(`<rect x="16" y="68" width="68" height="14" rx="7" fill="#e9a85c"/><rect x="12" y="58" width="76" height="12" rx="6" fill="#7a4a32"/><path d="M12 56q6-8 12 0t12 0t12 0t12 0t12 0t16 0v4H12z" fill="#7ed17a"/><path d="M14 52a36 32 0 0 1 72 0z" fill="#f2b56b"/><ellipse cx="30" cy="30" rx="3" ry="1.6" fill="#fff"/><ellipse cx="70" cy="28" rx="3" ry="1.6" fill="#fff"/>${F(50,40)}`)},
+{id:'d',n:'Dim sum',svg:sv(`<rect x="20" y="70" width="60" height="10" rx="4" fill="#f4d9a8"/><ellipse cx="50" cy="52" rx="32" ry="24" fill="#fff7ee" stroke="#eadbc8" stroke-width="2"/><path d="M50 29q-3 6-2 10M50 29q3 6 2 10M44 31q-2 5 0 9M56 31q2 5 0 9" stroke="#e5d3bd" fill="none" stroke-linecap="round"/>${F(50,56)}`)},
+{id:'g',n:'Gummy bear',svg:sv(`<g fill="#ff6b6b" fill-opacity=".9"><circle cx="34" cy="16" r="8"/><circle cx="66" cy="16" r="8"/><circle cx="50" cy="32" r="20"/><ellipse cx="50" cy="66" rx="22" ry="22"/><circle cx="26" cy="60" r="9"/><circle cx="74" cy="60" r="9"/><circle cx="38" cy="86" r="10"/><circle cx="62" cy="86" r="10"/></g><ellipse cx="40" cy="22" rx="6" ry="3" fill="#fff" opacity=".4"/>${F(50,34)}`)}];
+const inB=new Set();
+function shop(){$('#shelf').innerHTML='';$('#basket').innerHTML='';let n=0;SQ.forEach(q=>{const on=inB.has(q.id),b=document.createElement(on?'div':'button');b.className='sq'+(on?' empty':'');if(!on){b.innerHTML=q.svg+q.n;b.onclick=()=>{inB.add(q.id);shop()}}$('#shelf').append(b);if(on){const t=document.createElement('button');t.className='sq it';t.style.animationDelay=n++*.25+'s';t.title='Put back';t.innerHTML=q.svg;t.onclick=()=>{inB.delete(q.id);shop()};$('#basket').append(t)}});if(!inB.size)$('#basket').innerHTML='<span class="sub">Tap a squishy to add it. Tap it here to put it back.</span>'}
+function pay(g){$('#basket').classList.add('paying');$('#checkout').classList.add('hide');setTimeout(()=>{$('#bag').classList.add('pop');if(g){boom(7);$('#gift').classList.remove('hide')}else{toast('Thanks for shopping! Buy 2 or more next time for a free gift.');rs()}},1500)}
+function rs(){inB.clear();$('#basket').classList.remove('paying');$('#bag').classList.remove('pop');$('#checkout').classList.remove('hide');$('#gift').classList.add('hide');shop()}
+$('#checkout').onclick=()=>{if(!inB.size)toast('Your basket is empty. Pick a squishy!');else if(inB.size==1)modal('Are you sure?','<p>You only have 1 squishy. You’re highly encouraged to buy at least 2 to get a free gift!</p>',[['Keep shopping',null],['Checkout anyway',()=>pay(false),'ghost']]);else pay(true)};
+$('#gift').onclick=()=>{redeem('butterfly');rs()};shop();
+/* cake */
+(function(){const cols=['#ff8fb8','#8a7cf0','#6ad0c4','#ffc85a','#ff8fb8'];let h=`<ellipse cx="150" cy="236" rx="130" ry="16" fill="#d9cdf0"/><rect x="38" y="150" width="224" height="84" rx="14" fill="#ffb3cf"/><rect x="62" y="98" width="176" height="56" rx="12" fill="#fff0f6"/><path d="M62 114q11 14 22 0t22 0t22 0t22 0t22 0t22 0t22 0t22 0" stroke="#f06ea0" stroke-width="6" fill="none"/><path d="M38 168q11 14 22 0t22 0t22 0t22 0t22 0t22 0t22 0t22 0t22 0t22 0t22 0" stroke="#fff" stroke-width="6" fill="none"/>`;
+[80,115,150,185,220].forEach((x,i)=>h+=`<g class="cd" data-i="${i}" tabindex="0"><rect x="${x-4}" y="66" width="8" height="34" rx="3" fill="${cols[i]}"/><path class="fl" d="M${x} 44q-9 11 0 20q9-9 0-20z" fill="#ffb830"/><path class="sm" d="M${x} 40q-5-6 0-12t0-10" stroke="#999" fill="none" stroke-width="2.5"/><rect x="${x-14}" y="38" width="28" height="64" fill="transparent"/></g>`);
+$('#cakesvg').innerHTML=h;let n=0;window.resetCake=()=>{n=0;$$('.cd').forEach(c=>c.classList.remove('out'));$('#cc').textContent='0/5 blown out';$('#prize').classList.add('hide')};$$('.cd').forEach(c=>{const f=()=>{if(c.classList.contains('out'))return;c.classList.add('out');n++;$('#cc').textContent=n+'/5 blown out';if(n==5){boom(7);$('#prize').classList.remove('hide')}};c.onclick=f;c.onkeydown=e=>e.key=='Enter'&&f()})})();
+$('#prize').onclick=()=>redeem('flower');
+$('#again').onclick=()=>modal('Play again?','<p>This resets the whole game and takes back all your charms.</p>',[['Reset game',()=>{have.clear();save();try{localStorage.removeItem('yuan-charms')}catch(e){}seen.clear();$('#badge').textContent=3;$('#badge').classList.remove('hide');$('#back').click();ins.forEach(i=>{i.value='';i.disabled=false});$('#unlock').classList.remove('hide');$('#claimMoon').classList.add('hide');$('#genius').classList.add('hide');rs();resetCake();sync();show('home')}],['Cancel',null,'ghost']]);
+/* router */
+function show(p){if(!$('#'+p+'.page'))p='home';$$('.page').forEach(e=>e.classList.toggle('on',e.id==p));$$('nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')=='#'+p));scrollTo(0,0);try{history.replaceState(null,'','#'+p)}catch(e){}}
+function route(){show(location.hash.slice(1)||'home')}
+$$('nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.getAttribute('href').slice(1))}));
+addEventListener('hashchange',route);route();sync();requestAnimationFrame(frame);
+</script></body></html>
